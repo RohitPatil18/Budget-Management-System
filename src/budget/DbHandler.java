@@ -15,14 +15,28 @@ import java.awt.*;
 import java.util.ArrayList;
 
 class DbHandler{
+    
+    Connection con;
+    
+    DbHandler(){
+    
+            try{
+		DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+		con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","1password");
+            
+            }catch(SQLException e){
+
+                JOptionPane.showMessageDialog(new JDialog(),"Issue "+e);
+
+            }
+    
+    }
 
     public int addUser(int uid, String uname, String pw){
 
-	try{
-		DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-		Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","abc123");
-
-		String sql = "Insert into UserDetails values(?,?,?)";
+	
+        try{
+            String sql = "Insert into UserDetails values(?,?,?)";
 
 		PreparedStatement pst = con.prepareStatement(sql);
 
@@ -32,25 +46,26 @@ class DbHandler{
 
 		int r = pst.executeUpdate();
 
-            con.close();
+           
             
              return r;
 
-	}catch(SQLException e){
+        }
+        catch(SQLException e){
 
-            JOptionPane.showMessageDialog(new JDialog(),"Issue "+e);
-            return 0;
+                JOptionPane.showMessageDialog(new JDialog(),"Issue "+e);
 
-	}
-       
+            }
+        
+        return 0;
+		
     }
     
     public int updateUser(int uid, String name, String pw){
 
                 int r = 0;
 		try{
-			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","abc123");
+			
 
 			String sql = "update UserDetails set password = ? where id = ?";
 
@@ -61,7 +76,7 @@ class DbHandler{
 
 			r = pst.executeUpdate();
 
-			con.close();
+			
 
 		}catch(SQLException e){
 			JOptionPane.showMessageDialog(new JDialog(),"Issue "+e);
@@ -75,8 +90,8 @@ class DbHandler{
                 int r=0; 
                 
 		try{
-			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","abc123");
+			
+			
 
 			String sql = "delete from UserDetails where id = ?";
 
@@ -86,7 +101,7 @@ class DbHandler{
 
 			r = pst.executeUpdate();
 
-			con.close();
+			
 
 		}catch(SQLException e){
 			JOptionPane.showMessageDialog(new JDialog(),"Issue "+e);
@@ -101,8 +116,8 @@ class DbHandler{
                 int r=0; 
                 
 		try{
-			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","abc123");
+			
+			
 
 			String sql = "delete from transaction where id = ?";
 
@@ -112,7 +127,7 @@ class DbHandler{
 
 			r = pst.executeUpdate();
 
-			con.close();
+			
 
 		}catch(SQLException e){
 			JOptionPane.showMessageDialog(new JDialog(),"Issue "+e);
@@ -126,8 +141,6 @@ class DbHandler{
                 
                 boolean flag = false;
 		try{
-			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","abc123");
 
 			String sql = "select * from UserDetails where id = ? and password = ?";
 
@@ -143,7 +156,7 @@ class DbHandler{
 			}
 			rs.close();
                         
-                        con.close();
+                        
                         
 		}catch(SQLException e){
 
@@ -160,8 +173,8 @@ class DbHandler{
                 
 
 		try{
-			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","abc123");
+			
+			
 
 			String sql = "select username from UserDetails where id = ?";
 
@@ -176,7 +189,7 @@ class DbHandler{
 			}
 			rs.close();
                         
-                        con.close();
+                        
                         
 		}catch(SQLException e){
 
@@ -193,8 +206,8 @@ class DbHandler{
                 
 
 		try{
-			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","abc123");
+			
+			
 
 			String sql = "select balance from transaction where id = ?";
                         
@@ -210,7 +223,7 @@ class DbHandler{
 			}
 			rs.close();
                         
-                        con.close();
+                        
                         
 		}catch(SQLException e){
 
@@ -223,8 +236,8 @@ class DbHandler{
     public int Deposit(int uid, String date, String mode, long amt, long bal){
 
 	try{
-		DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-		Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","abc123");
+		
+		
 
 		String sql = "Insert into transaction values(?,?,?,?,?)";
 
@@ -238,7 +251,7 @@ class DbHandler{
 
 		int r = pst.executeUpdate();
 
-            con.close();
+            
             
              return r;
 
@@ -257,8 +270,8 @@ class DbHandler{
             ArrayList<Transaction> transactionList = new ArrayList<>();
             
             try{
-		DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-		Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","abc123");
+		
+		
 
 		String sql = "select * from transaction where id = ?";
                         
@@ -280,7 +293,6 @@ class DbHandler{
                     
 		}
 		rs.close();
-		con.close();
 
             }catch(SQLException e){
 
@@ -293,12 +305,12 @@ class DbHandler{
         
         public ArrayList<Users> userList(){
             ArrayList<Users> userList = new ArrayList<>();
-            Connection con;
+            
             ResultSet rs;
             
             try{
-		DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-		con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","abc123");
+		
+                
 
 		String sql = "select id,username from UserDetails";
                         
@@ -317,7 +329,7 @@ class DbHandler{
                     
 		}
 		rs.close();
-		con.close();
+		
 
             }catch(SQLException e){
 
@@ -331,8 +343,8 @@ class DbHandler{
     int withdraw(int id, String date, String mode, long amt, long bal) {
      
         	try{
-		DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-		Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","abc123");
+		
+		
 
 		String sql = "Insert into transaction values(?,?,?,?,?)";
 
@@ -346,7 +358,7 @@ class DbHandler{
 
             int r = pst.executeUpdate();
 
-            con.close();
+            
             
              return r;
 
@@ -360,6 +372,14 @@ class DbHandler{
         
     }
         
+    public void closeConnection(){
+        try{
+            
+            con.close();
+        }catch(Exception e){
+        }
+        
+    }
 
 
 

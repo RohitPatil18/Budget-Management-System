@@ -120,7 +120,7 @@ public class UserLogin extends javax.swing.JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         
-        DbHandler db = new DbHandler();
+        
         
         int id=0;
         try{
@@ -129,9 +129,9 @@ public class UserLogin extends javax.swing.JFrame {
             
         }
         
-        String username = db.getUsername(id);
+        String username = new DbHandler().getUsername(id);
                
-        if(db.getPasswordDetails(id, pwLogin.getText())){           
+        if(new DbHandler().getPasswordDetails(id, pwLogin.getText())){           
                     UserFrame uf = new UserFrame(id,username);                    
                     dispose();
 
